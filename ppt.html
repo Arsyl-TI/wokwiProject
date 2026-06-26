@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Flood Early Warning System V2 - Kelompok 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { background-color: #0f172a; margin: 0; padding: 20px 0; display: grid; place-items: center; min-height: 100vh; font-family: 'Lato', sans-serif; color: #f8fafc; }
+        
+        .slide-container {
+            width: 1280px; height: 720px;
+            background-color: #0f172a; border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+            padding: 60px; z-index: 1; margin-bottom: 40px;
+        }
+
+        .slide-container::before {
+            content: ""; position: absolute; top: -150px; right: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        h1, h2, h3 { font-family: 'Urbanist', sans-serif; font-weight: 700; margin: 0; }
+        h1 { font-size: 68px; line-height: 1.1; color: #f8fafc; font-weight: 900;}
+        .slide-title { font-size: 42px; margin-bottom: 30px; color: #38bdf8; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #1e293b; padding-bottom: 10px;}
+        h3 { font-size: 26px; color: #7dd3fc; margin-bottom: 15px; }
+        p, li { font-size: 19px; line-height: 1.6; color: #cbd5e1; }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; position: relative; z-index: 2; }
+
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; align-items: center;}
+        .tiled-content { display: flex; gap: 25px; width: 100%; }
+        .tile { flex: 1; background: rgba(30, 41, 59, 0.7); padding: 30px; border-radius: 16px; border: 1px solid #334155; backdrop-filter: blur(10px); }
+        .tile .icon { font-size: 42px; color: #38bdf8; margin-bottom: 20px; }
+        .highlight-box { background: linear-gradient(135deg, #0c4a6e, #1e3a8a); padding: 30px; border-radius: 16px; border-left: 6px solid #38bdf8;}
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(30, 41, 59, 0.5); border-radius: 12px; overflow: hidden;}
+        th { background: #0f172a; color: #38bdf8; text-align: left; padding: 18px; font-size: 20px; border-bottom: 2px solid #334155; }
+        td { padding: 18px; border-bottom: 1px solid #1e293b; color: #e2e8f0; font-size: 18px;}
+        .critical { color: #ef4444; font-weight: bold; background: rgba(239, 68, 68, 0.1);}
+        .warning { color: #f59e0b; font-weight: bold; }
+        .safe { color: #10b981; font-weight: bold; }
+
+        .bullet-list { list-style: none; padding: 0; }
+        .bullet-list li { position: relative; padding-left: 35px; margin-bottom: 15px; }
+        .bullet-list li::before { content: "\f058"; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; left: 0; color: #38bdf8; }
+
+        .badge { display: inline-block; padding: 5px 12px; background: #0284c7; color: white; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 10px;}
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slide1">
+    <div class="content-area" style="text-align: center;">
+        <p style="color: #38bdf8; font-weight: bold; letter-spacing: 4px; margin-bottom: 20px;">UNIVERSITAS ISLAM RIAU</p>
+        <h1>Smart Flood Early<br><span style="color: #38bdf8;">Warning System V2.0</span></h1>
+        <p style="max-width: 800px; margin: 30px auto; font-size: 22px;">Integrasi Full-Stack IoT, Edge Computing, Aktuator Otomatis, dan Notifikasi Telegram untuk Mitigasi Bencana Hidrometeorologi.</p>
+        <div style="margin-top: 50px; border-top: 1px solid #334155; padding-top: 30px; display: inline-block;">
+            <p style="font-size: 18px; color: #94a3b8;">KELOMPOK 12: T Arsyl Syahrowi & Ilham Manziz</p>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Arsitektur Ekosistem IoT</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <span class="badge">1. Edge (Pengirim)</span>
+                <div class="icon"><i class="fa-solid fa-microchip"></i></div>
+                <h3>Akuisisi & Analisa</h3>
+                <p>Sensor memindai lingkungan. ESP32 menghitung <i>Rate of Change</i> air secara lokal. Data ditampilkan real-time di layar <b>OLED</b> lokal disertai <b>Buzzer</b> darurat.</p>
+            </div>
+            <div class="tile">
+                <span class="badge">2. Transport</span>
+                <div class="icon"><i class="fa-solid fa-cloud"></i></div>
+                <h3>MQTT HiveMQ</h3>
+                <p>Distribusi payload data sangat ringan. Memastikan transmisi kecepatan tinggi dan tanpa <i>packet loss</i> menuju berbagai penerima secara bersamaan.</p>
+            </div>
+            <div class="tile">
+                <span class="badge">3. Node Aktuator & Web</span>
+                <div class="icon"><i class="fa-solid fa-server"></i></div>
+                <h3>Respon Otomatis</h3>
+                <p>ESP32 Penerima menggerakkan <b>Motor Servo</b> (Gerbang Pintu Air), sementara <b>Web Dashboard</b> merender grafik tren dan menembak API Telegram Bot.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Pembaruan Instrumen Perangkat Keras</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul class="bullet-list">
+                    <li><strong>Layar OLED SSD1306 (TX):</strong> Indikator visual I2C untuk pemantauan langsung oleh warga di lokasi tanpa koneksi internet.</li>
+                    <li><strong>Alarm Buzzer (TX):</strong> Peringatan auditori berdesibel tinggi yang aktif berdasarkan eskalasi status bahaya.</li>
+                    <li><strong>Motor Servo (RX):</strong> Representasi aktuator cerdas yang membuka/menutup gerbang air secara otonom.</li>
+                    <li><strong>Sensor HC-SR04 & LDR:</strong> Pembaca parameter utama dengan suplai tegangan 5V stabil.</li>
+                </ul>
+            </div>
+            <div class="highlight-box">
+                <div class="icon"><i class="fa-solid fa-bolt" style="font-size: 32px; color: #facc15;"></i></div>
+                <h3 style="color: white;">Non-Blocking Delay</h3>
+                <p style="color: #cbd5e1;">Arsitektur kode menggunakan fungsi <code>millis()</code> murni untuk *multitasking*, memungkinkan ESP32 mengolah data lokal, dan menggerakkan aktuator tanpa memutus jaringan komunikasi nirkabel.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">Algoritma Logika Keputusan Berjenjang</h2>
+    <div class="content-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>Kondisi Pembacaan Sensor</th>
+                    <th>Klasifikasi Status</th>
+                    <th>Aksi Aktuator Servo</th>
+                    <th>Notifikasi & Alarm</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Jarak &gt; 50 cm</td>
+                    <td class="safe">AMAN</td>
+                    <td>Pintu Tertutup (0&deg;)</td>
+                    <td>Sistem Siaga (Senyap)</td>
+                </tr>
+                <tr>
+                    <td>Jarak &lt; 50 cm, Cahaya &ge; 30%</td>
+                    <td class="warning">WASPADA (SIANG)</td>
+                    <td>Buka Parsial (45&deg;)</td>
+                    <td>Buzzer Beep Lambat</td>
+                </tr>
+                <tr>
+                    <td>Jarak &lt; 50 cm, Cahaya &lt; 30%</td>
+                    <td class="critical">SIAGA 1 (MALAM)</td>
+                    <td>Buka Penuh (90&deg;)</td>
+                    <td>Buzzer Melengking + Telegram</td>
+                </tr>
+                <tr>
+                    <td><strong>Air Naik &gt; 10 cm dalam 5 Detik</strong></td>
+                    <td class="critical">BANJIR BANDANG!</td>
+                    <td>Buka Penuh Darurat</td>
+                    <td>Sirine Konstan + Telegram Instan</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">Full-Stack Landing Page & Dashboard</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-code"></i></div>
+                <h3>Type-Safe Architecture</h3>
+                <p>Aplikasi web dibangun kokoh menggunakan TypeScript. Kami secara ketat mengeliminasi kerentanan <i>type: any</i> pada halaman <code>page.tsx</code> dengan mendefinisikan *interface* khusus untuk menangkap <i>payload</i> data sensor dari MQTT.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-chart-area"></i></div>
+                <h3>Real-Time Line Charting</h3>
+                <p>Mengintegrasikan pustaka <i>Recharts</i> untuk merender fluktuasi grafik elevasi air. Data historis (Time-Series) membantu analis melihat pola tren air secara instan di Web Browser.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Notifikasi Push Telegram & Keamanan</h2>
+    <div class="content-area">
+        <div class="highlight-box" style="background: linear-gradient(135deg, #0f766e, #064e3b); margin-bottom: 30px;">
+            <h3 style="color: white;"><i class="fa-solid fa-shield-check"></i> Pengamanan Token & Anti-Spam</h3>
+            <p>Sistem notifikasi dikelola penuh dari arsitektur <i>Serverless Backend</i> (Next.js API Route) untuk mencegah eksposisi rahasia Bot Token ke sisi publik/klien.</p>
+        </div>
+        
+        <div class="two-column" style="gap: 20px;">
+            <div class="tile" style="background: #1e293b;">
+                <h3>Otomatisasi Darurat</h3>
+                <p>Notifikasi hanya dikirim saat sensor mendeteksi ambang batas <i>SIAGA 1</i> atau potensi <i>BANJIR BANDANG</i>, menyertakan data level air saat itu dan anjuran evakuasi warga.</p>
+            </div>
+            <div class="tile" style="background: #1e293b;">
+                <h3>Throttle Logic Filter</h3>
+                <p>Memanfaatkan fungsionalitas <code>useRef</code> pada React untuk memberikan jeda aman pengiriman pesan (60 detik antar-peringatan), sehingga grup WhatsApp/Telegram terhindar dari tumpukan pesan sampah.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">Mitigasi Anomali Sensor (Stilling Well)</h2>
+    <div class="content-area">
+        <div class="highlight-box" style="margin-bottom: 30px; background: rgba(239, 68, 68, 0.1); border-left: 6px solid #ef4444;">
+            <h3 style="color: #f8fafc;"><i class="fa-solid fa-triangle-exclamation"></i> Tantangan Industri Nyata</h3>
+            <p>Sensor Ultrasonik rawan mengalami <i>False Positive</i> jika mendeteksi objek asing di atas sungai (seperti sampah plastik atau fauna) yang menyebabkan pembacaan jarak anjlok seolah-olah terjadi banjir bandang.</p>
+        </div>
+        
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Hardware: Stilling Well</h3>
+                <p>Sensor tidak digantung bebas, melainkan dimasukkan ke dalam instalasi Pipa Pelindung (Stilling Well) berpori. Air sungai masuk dengan tenang, sementara sampah padat tersaring di luar area pantul sensor.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-filter"></i></div>
+                <h3>Software: Median Filtering</h3>
+                <p>Pengembangan *firmware* menerapkan teknik <i>Debounce Delay</i>. ESP32 wajib mengambil rata-rata 5 sampel berkelanjutan sebelum mengesahkan status darurat, mengabaikan objek asing yang melintas cepat.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide8" style="justify-content: center; text-align: center;">
+    <div style="width: 100px; height: 5px; background: #38bdf8; margin: 0 auto 30px;"></div>
+    <h1>Ekosistem IoT<br><span style="color: #38bdf8;">Komprehensif</span></h1>
+    <p style="max-width: 800px; margin: 30px auto;">Dari pengumpulan data di ujung sungai (Edge), transmisi WSN berkinerja tinggi, visualisasi cerdas di Web Landing Page, hingga aktuasi Motor Servo mekanik untuk respon bencana nyata.</p>
+    
+    <div style="margin-top: 60px; font-size: 24px; color: #38bdf8; font-weight: bold; letter-spacing: 2px;">
+        TERIMA KASIH | ADA PERTANYAAN?
+    </div>
+</div>
+
+</body>
+</html>
